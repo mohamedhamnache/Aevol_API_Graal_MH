@@ -14,3 +14,4 @@ SECRET_KEY = 'vol38ae'
 SimulationDir ="/home/mhamnache/Simulations"
 launchSimulationClient ="/home/mhamnache/AevolServices/Bin/launchAevolSimulation_client"
 configClient ="/home/mhamnache/cfgs/myClient.cfg"
+RemoteSimDir ="/root/Simulations"

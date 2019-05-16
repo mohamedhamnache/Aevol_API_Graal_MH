@@ -83,7 +83,15 @@ class g5kHostsModel(db.Model):
 
         return {'G5k_Hosts': list(map(lambda x: to_json(x), g5kHostsModel.query.all()))}
 
+    @classmethod
+    def return_hosts(cls,id_deployment):
+        def to_json(x):
 
+            return {
+              'hostName' : x.hostName,     
+            }
+
+        return {'hosts': list(map(lambda x: to_json(x), cls.query.filter_by(id_dep=id_deployment)))}
 
 
 #########################  Jobs ########################### 

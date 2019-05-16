@@ -5,7 +5,7 @@ import datetime, time
 import os
 import config
 from Packages.ResourceAlloc.helper import Helper
-from Models import UserModel, JobModel
+from Models import UserModel, JobModel, g5kHostsModel
 
 
 parser = reqparse.RequestParser()
@@ -126,5 +126,24 @@ class launchSingleSImulation(Resource):
         cd = "cd "+simDir
         runCmd =config.launchSimulationClient+' '+ config.configClient+' param.in '+data['ID_USER'] +' '+data['ID_JOB']+' "'+data['Nom_simu']+'" '+ data['nb_gen']+' '+data['nb_th']
         print(runCmd)
-        os.system(cd +' && '+runCmd)
-        return 0
+        res = os.system(cd +' && '+runCmd)
+        print(res)
+        if(res == 0):
+            remoteDir =config.RemoteSimDir+'/'+str(data['ID_JOB'])+'/*'
+            
+            print("Success !!")
+            data = g5kHostsModel.return_hosts(int(data['id_deployment']))
+            print(data)
+            hosts =data['hosts']
+            for host in hosts:
+                print(host['hostName'])
+                hostName =str(host['hostName'])
+                hostName =hostName.replace("grid5000.fr","g5k")
+                hostName='root@'+hostName
+                remotePath = hostName+':'+remoteDir
+                print('scp -r '+remotePath+' '+simDir)
+                os.system('scp -r '+remotePath+' '+simDir)
+        else:
+            print("Server Down")
+       
+        return res

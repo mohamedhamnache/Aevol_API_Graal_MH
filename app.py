@@ -52,3 +52,4 @@ api.add_resource(Authentication.ResetPassword, '/resetpassword')
 
 # FileManager
 api.add_resource(FileManager.ParamFileUpload,'/upload-param-file')
+api.add_resource(FileManager.DownloadResult,'/download-result')

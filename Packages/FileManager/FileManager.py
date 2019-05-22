@@ -1,11 +1,13 @@
 from flask_restful import Resource, reqparse
+from flask import send_file
 import werkzeug, os
+import shutil
 
 UPLOAD_FOLDER = '/home/mhamnache/Simulations'
 parser = reqparse.RequestParser()
 parser.add_argument('file',type=werkzeug.datastructures.FileStorage, location='files')
 parser.add_argument('id_job', help = 'This field cannot be blank', required = False)
-
+parser.add_argument('Nom_simu', help = 'This field cannot be blank', required = False)
 class ParamFileUpload(Resource):
     decorators=[]
 
@@ -34,3 +36,16 @@ class ParamFileUpload(Resource):
                 'message':'Something when wrong',
                 'status':'error'
                 }
+class DownloadResult(Resource):
+    def post(self):
+        data = parser.parse_args()
+        print(data['id_job'])
+        print(data['Nom_simu'])
+        try:
+            path = UPLOAD_FOLDER+'/'+data['id_job']
+            fileName = data['Nom_simu']+'-'+data['id_job']
+            return send_file(shutil.make_archive(fileName, 'zip', path), as_attachment=True)
+        except:
+            return{
+                'message' : 'Error'
+            }

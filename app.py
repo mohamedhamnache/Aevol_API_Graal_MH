@@ -37,6 +37,7 @@ api.add_resource(SimulationManager.DeletJob,'/remove-job')
 api.add_resource(SimulationManager.GetStatus,'/get-status')
 api.add_resource(SimulationManager.AevolTools,'/aevol-tools')
 api.add_resource(SimulationManager.GetUserJobs,'/userJobs')
+api.add_resource(SimulationManager.GetFinishedUserJobs,'/user-finished-jobs')
 api.add_resource(SimulationManager.launchSingleSImulation,'/run-single-sim')
 # Authentication endpoints 
 

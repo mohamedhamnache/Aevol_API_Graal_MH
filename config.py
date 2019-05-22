@@ -15,3 +15,6 @@ SimulationDir ="/home/mhamnache/Simulations"
 launchSimulationClient ="/home/mhamnache/AevolServices/Bin/launchAevolSimulation_client"
 configClient ="/home/mhamnache/cfgs/myClient.cfg"
 RemoteSimDir ="/root/Simulations"
+
+# sysyem image
+aevolImage ="aevol-1.0"

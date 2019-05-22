@@ -72,7 +72,7 @@ class Helper ():
         logger.info('Deploying hosts')
         print(nodes)
         start = datetime.datetime.now()
-        deployed, undeployed = deploy(Deployment(nodes, env_name="aevol_env2"))
+        deployed, undeployed = deploy(Deployment(nodes, env_name=config.aevolImage))
         end = datetime.datetime.now()
 
         print(end - start)

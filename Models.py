@@ -154,8 +154,33 @@ class JobModel(db.Model):
             }
 
         return {'Jobs': list(map(lambda x: to_json(x), cls.query.filter_by(ID_USER=ID_USER))),'ID_USER':ID_USER}
+    
     #Update start simulation time 
+    @classmethod
+    def return_finished_userJobs(cls,ID_USER):
+        def to_json(x):
 
+            if (str(x.Start_time) =='None'):
+                start ="0000-00-00 00:00:00"
+            else:
+                 start = str(x.Start_time)
+            if (str(x.End_time) =='None'):
+                end ="0000-00-00 00:00:00" 
+            else:
+                end =str(x.End_time)
+
+            return {
+                'ID_JOB': x.ID_JOB,
+                'ID_USER' :x.ID_USER,
+                'Nom_simu': x.Nom_simu,
+                'Statut': x.Statut, 
+                'Start_time': start, 
+                'End_time': end, 
+                'Percentage': x.Percentage,
+                'id_deployment': x.id_deployment,       
+            }
+
+        return {'Jobs': list(map(lambda x: to_json(x), cls.query.filter_by(ID_USER=ID_USER,Statut="finished"))),'ID_USER':ID_USER}
     @classmethod
     def updateStartTime(cls,ID_JOB,ID_USER):
         job = cls.query.filter_by(ID_JOB=ID_JOB,ID_USER=ID_USER).first()

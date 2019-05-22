@@ -3,6 +3,7 @@ import requests
 import json
 import datetime, time
 import os
+import shutil
 import config
 from Packages.ResourceAlloc.helper import Helper
 from Models import UserModel, JobModel, g5kHostsModel
@@ -92,6 +93,7 @@ class DeletJob(Resource):
         data = parser.parse_args()
         try:
             r = JobModel.removeJob(int(data['ID_JOB']),int(data['ID_USER']))
+            shutil.rmtree(config.SimulationDir+'/'+data['ID_JOB'])
             return r
         except:
             return{'message':"Something Wrong Happened"},500
@@ -115,7 +117,7 @@ class GetUserJobs(Resource):
     def post(self):
         data = parser.parse_args()
         try:  
-            return JobModel.return_userJobs(int(data['ID_USER']))
+            return JobModel.return_userJobs(int(data['ID_USER'])),200
         except:
             return{'message':"Something Wrong Happened"},500
 
@@ -128,22 +130,30 @@ class launchSingleSImulation(Resource):
         print(runCmd)
         res = os.system(cd +' && '+runCmd)
         print(res)
-        if(res == 0):
-            remoteDir =config.RemoteSimDir+'/'+str(data['ID_JOB'])+'/*'
+        #if(res == 0):
+        #    remoteDir =config.RemoteSimDir+'/'+str(data['ID_JOB'])+'/*'
             
-            print("Success !!")
-            data = g5kHostsModel.return_hosts(int(data['id_deployment']))
-            print(data)
-            hosts =data['hosts']
-            for host in hosts:
-                print(host['hostName'])
-                hostName =str(host['hostName'])
-                hostName =hostName.replace("grid5000.fr","g5k")
-                hostName='root@'+hostName
-                remotePath = hostName+':'+remoteDir
-                print('scp -r '+remotePath+' '+simDir)
-                os.system('scp -r '+remotePath+' '+simDir)
-        else:
-            print("Server Down")
+         #   print("Success !!")
+          #  data = g5kHostsModel.return_hosts(int(data['id_deployment']))
+           # print(data)
+            #hosts =data['hosts']
+            #for host in hosts:
+             #   print(host['hostName'])
+             #   hostName =str(host['hostName'])
+              #  hostName =hostName.replace("grid5000.fr","g5k")
+               # hostName='root@'+hostName
+                #remotePath = hostName+':'+remoteDir
+                #print('scp -r '+remotePath+' '+simDir)
+                #os.system('scp -r '+remotePath+' '+simDir)
+        #else:
+           # print("Server Down")
        
         return res
+
+class GetFinishedUserJobs(Resource):
+    def post(self):
+        data = parser.parse_args()
+        try:  
+            return JobModel.return_finished_userJobs(int(data['ID_USER'])),200
+        except:
+            return{'message':"Something Wrong Happened"},500
